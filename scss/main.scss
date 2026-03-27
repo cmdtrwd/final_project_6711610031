@@ -1,0 +1,17 @@
+// NEUROVISION X SASS ARCHITECTURE
+// Main compile entry file
+// This strictly follows the requirement of using modular @use structure instead of @import
+
+// Note: In Dart Sass, variables are scoped inside modules. Each partial imports `_variables` and `_mixins` where needed.
+// This main file gathers the output styles.
+
+// 1. Base Styles and Browser Resets
+@use 'base';
+
+// 2. Reusable Modular Components
+@use 'components';
+
+// 3. Layout Constructs and Section Styling
+@use 'layout';
+
+// Triggering compile

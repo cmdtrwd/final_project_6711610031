@@ -1,0 +1,25 @@
+// VARIABLES PARTIAL
+// Stores main variables: colors, typography, sizing, and breakpoints
+
+// Colors: Dark futuristic UI with Neon glow
+$bg-color: #050508;
+$bg-card: rgba(20, 20, 30, 0.4);
+$neon-blue: #00f0ff;
+$neon-purple: #8a2be2;
+$text-light: #ffffff;
+$text-muted: #a0a0a0;
+$border-color: rgba(255, 255, 255, 0.1);
+
+// Typography
+$font-primary: 'Inter', sans-serif;
+$font-size-base: 16px;
+$font-size-h1-mobile: 2.5rem;
+$font-size-h1-desktop: 4.5rem; // Larger on desktop
+$font-size-h2: 2rem;
+
+// Spacing Scale (Will be used with Operators)
+$spacing-unit: 8px;
+
+// Breakpoints for Mobile-First responsive design
+$bp-tablet: 768px;
+$bp-desktop: 1024px;

@@ -1,0 +1,249 @@
+// COMPONENTS PARTIAL
+// Buttons, Navbars, Cards - heavily utilizes modular structures
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// NAVBAR COMPONENT
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  z-index: 1000;
+  transition: all 0.4s ease;
+  
+  // This class is added via JavaScript on scroll
+  &.scrolled {
+    padding: 1rem 2rem;
+    background-color: rgba(5, 5, 8, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    
+    span { 
+      color: $neon-blue; 
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+  }
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links {
+  display: none; // Mobile-first collapse
+  list-style: none;
+  gap: 2.5rem;
+  margin: 0;
+  padding: 0;
+  
+  @include tablet {
+    display: flex;
+    align-items: center;
+  }
+  
+  a {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    
+    &:hover {
+      color: $neon-blue;
+    }
+  }
+}
+
+.nav-cta {
+  display: none !important; // Force hide on mobile — btn-glow mixin sets inline-flex which would override without !important
+  @include tablet {
+    display: inline-flex !important;
+  }
+}
+
+.menu-icon {
+  background: none;
+  border: none;
+  color: $text-light;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem; // Nudge slightly to the right
+  
+  @include tablet {
+    display: none; // Hidden on desktop
+  }
+  
+  &:hover {
+    color: $neon-blue;
+  }
+}
+
+// MOBILE SLIDE-IN MENU
+.mobile-menu {
+  display: none; // only shown via media query below
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none; // transparent until open
+
+  // Blurred backdrop
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 8, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  // Slide-in panel from the right
+  &__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60%;  // Reduced from 75% — shifts the panel right so it doesn't overlap the logo
+    max-width: 260px;
+    height: 100%;
+    background: rgba(10, 10, 18, 0.97);
+    border-left: 1px solid rgba($neon-blue, 0.15);
+    padding: 6rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+
+    a {
+      display: block;
+      padding: 1rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $text-light;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      transition: color 0.25s ease, padding-left 0.25s ease;
+
+      &:hover {
+        color: $neon-blue;
+        padding-left: 0.5rem;
+      }
+    }
+
+    .btn-primary {
+      margin-top: 2rem;
+      width: 100%; // Full width for strong CTA presence
+      display: inline-flex;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.95rem; // Prominent size
+      padding: 1rem 2rem !important; // Taller and wider
+      padding-left: 2rem !important; // override the a:hover indent rule
+      letter-spacing: 2px;
+    }
+  }
+
+  // Open state (toggled by JS)
+  &.is-open {
+    pointer-events: auto;
+
+    .mobile-menu__backdrop {
+      opacity: 1;
+    }
+
+    .mobile-menu__panel {
+      transform: translateX(0);
+    }
+  }
+
+  // Only display on mobile (below tablet breakpoint)
+  @media (max-width: 767px) {
+    display: block;
+  }
+}
+
+// REUSABLE BUTTON COMPONENTS
+// Uses Inheritance (@extend)
+.btn-base {
+  @include flex-center;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+// Inherits from .btn-base and applies mixin
+.btn-primary {
+  @extend .btn-base;
+  @include btn-glow($neon-blue, #ffffff);
+}
+
+.btn-secondary {
+  @extend .btn-base;
+  @include btn-glow($neon-blue, #ffffff);
+}
+
+// GLOBAL ICON STYLES (Added for SVGs)
+.icon {
+  width: 32px;
+  height: 32px;
+  color: $neon-blue;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 255, 0.5));
+}
+
+// GLASSMORPHISM CARD COMPONENT
+.glass-card {
+  @include glass-effect;
+  padding: $spacing-unit * 4; // Use operators
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  // SASS Nesting
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
+  }
+
+  &__icon {
+    display: inline-flex; // Replaced font-size config with flex to support svg bounding boxes smoothly
+    margin-bottom: $spacing-unit * 2;
+  }
+
+  &__title {
+    color: $text-light;
+    margin-bottom: $spacing-unit * 1.5;
+    font-size: 1.25rem;
+  }
+
+  &__text {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+  }
+}
+
+// SCROLL ANIMATION COMPONENT
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

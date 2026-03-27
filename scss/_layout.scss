@@ -1,0 +1,580 @@
+// LAYOUT PARTIAL
+// Structure of main sections, hero areas, and fluid grids
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// HERO SECTION (Homepage with Spline Background)
+.hero {
+  position: relative;
+  height: 100vh; // Always 100vh for maximum canvas interactivity
+  width: 100%;
+  overflow: hidden;
+
+  @include mobile {
+    height: auto;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+}
+
+// GLOBAL PRELOADER
+#preloader {
+  position: fixed;
+  inset: 0;
+  background-color: $bg-color;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.preloader-content {
+  text-align: center;
+
+  .preloader-logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+
+    @include desktop {
+      font-size: 3.5rem;
+    }
+
+    span {
+      color: $neon-blue;
+      text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    }
+  }
+
+  .preloader-text {
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    color: $text-muted;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .preloader-bar {
+    width: 200px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+
+    .preloader-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 40%;
+      background: $neon-blue;
+      box-shadow: 0 0 10px $neon-blue;
+      animation: loading-bar 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    left: -40%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.hero-3d {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: auto; // Enables full Spline interaction
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  @include desktop {
+    width: 140%; // Extends the canvas horizontally to effectively shift the 3D model's center to the right
+    transform: scale(1.15) translateY(8%); // Matches visual text alignment perfectly
+  }
+
+  @include mobile {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1; // Show the full Spline scene, uncropped
+    flex-shrink: 0;
+    margin-top: -70px;
+    margin-bottom: 50px;
+  }
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // Gradient on left side so the right side is fully visible
+  background: linear-gradient(to right, rgba(5, 5, 8, 0.8) 0%, rgba(5, 5, 8, 0.5) 40%, rgba(5, 5, 8, 0) 100%);
+  z-index: 2;
+  pointer-events: none; // CRITICAL: Does not block interactions
+
+  @include mobile {
+    display: none; // Not needed when content is below the model
+  }
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 5%; // Mobile left padding
+  transform: translateY(-50%);
+  z-index: 3;
+  max-width: 500px; // Increased for mobile stability
+  pointer-events: auto; // Allow clicking buttons
+  padding: 0;
+
+  @include desktop {
+    left: 10%; // More padding on desktop
+    max-width: 800px; // Provide ample room so 'NeuroVision X' doesn't wrap
+  }
+
+  @include mobile {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    max-width: 100%;
+    padding: $spacing-unit * 4 $spacing-unit * 3 $spacing-unit * 6;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    margin-bottom: $spacing-unit;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    letter-spacing: -2px;
+
+    @include mobile {
+      font-size: $font-size-h1-mobile;
+      letter-spacing: -1px;
+    }
+  }
+
+  p {
+    font-size: 1.25rem;
+    color: $text-light;
+    margin-bottom: $spacing-unit * 4;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    @include mobile {
+      font-size: 1rem;
+      margin-bottom: $spacing-unit * 3.5;
+    }
+  }
+}
+
+// GENERAL SECTIONS
+.section {
+  padding: ($spacing-unit * 10) 0; // Usage of Operator (96px padding)
+  position: relative;
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-unit * 8;
+
+    h2 {
+      font-size: 2.5rem;
+      color: $text-light;
+
+      // Neon glow effect on headings
+      span {
+        color: $neon-blue;
+        text-shadow: 0 0 15px rgba(0, 240, 255, 0.5); // Blue glow
+      }
+    }
+
+    p {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// GRID LAYOUTS
+// Features Section Grid
+.features-grid {
+  display: flex;
+  flex-direction: column; // Stack vertically on mobile
+  gap: $spacing-unit * 4;
+
+  @include tablet {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &>* {
+      flex: 1 1 calc(50% - ($spacing-unit * 4)); // Calculate grid basis
+    }
+  }
+
+  @include desktop {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // 3-column grid on desktop
+  }
+}
+
+// Split Layout (Product Preview)
+.split-layout {
+  display: flex;
+  flex-direction: column; // Stack on mobile
+  gap: $spacing-unit * 8;
+  align-items: center;
+
+  @include desktop {
+    flex-direction: row; // Side-by-side on desktop
+    justify-content: space-between;
+
+    &>* {
+      flex: 1;
+    }
+
+    &--reverse {
+      flex-direction: row-reverse;
+    }
+
+    &__content,
+    &__media {
+      width: 50%;
+    }
+  }
+}
+
+// Highlight Blocks Grid
+.highlight-grid {
+  display: grid;
+  grid-template-columns: 1fr; // Mobile: 1 column
+  gap: $spacing-unit * 3;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr); // Tablet: 2 columns
+  }
+
+  @include desktop {
+    grid-template-columns: repeat(4, 1fr); // Desktop: 4 columns
+  }
+}
+
+// CTA Layout
+.cta-section {
+  text-align: center;
+  padding: ($spacing-unit * 10) 0;
+  // Radial gradient using variables directly
+  background: radial-gradient(circle at center, rgba(0, 240, 255, 0.1) 0%, $bg-color 65%);
+
+  h2 {
+    font-size: 3rem;
+  }
+}
+
+// Color Variants Grid (Choose your Aura)
+.colors-grid {
+  display: grid;
+  grid-template-columns: 1fr; // Mobile: 1 column
+  gap: $spacing-unit * 4;
+
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr); // Tablet and Desktop: 3 columns
+  }
+}
+
+// Product Details Grid (Specs)
+.specs-grid {
+  display: grid;
+  grid-template-columns: 1fr; // Mobile
+  gap: $spacing-unit * 3;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Table styling for Tech Specs
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: $spacing-unit * 4;
+
+  th,
+  td {
+    padding: $spacing-unit * 2.5;
+    text-align: left;
+    border-bottom: 1px solid $border-color;
+  }
+
+  th {
+    color: $text-muted;
+    font-weight: 500;
+    width: 35%;
+  }
+
+  tr:last-child th,
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+// Experience Page Timeline Layout
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-unit * 6;
+  border-left: 2px solid $neon-blue; // Using variable
+  padding-left: $spacing-unit * 4;
+  margin-left: $spacing-unit * 2;
+
+  &__step {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      // Mathematically perfect alignment independent of circle size
+      // Placed exactly at the border edge, then transformed by 50% left to perfectly center on the 2px line
+      left: -($spacing-unit * 4);
+      transform: translateX(-50%) translateX(-1px);
+      top: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: $bg-color;
+      border: 3px solid $neon-blue;
+      box-shadow: 0 0 10px $neon-blue;
+    }
+
+    h3 {
+      color: $neon-blue;
+      margin-bottom: $spacing-unit;
+    }
+  }
+}
+
+// PREMIUM BENTO GRID (Apple/Awwwards Style)
+.premium-bento {
+  display: grid;
+  gap: $spacing-unit * 2.5;
+  grid-template-columns: 1fr; // Mobile stacks vertically
+  grid-auto-rows: 300px;
+  
+  @include tablet {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(180px, auto);
+  }
+  
+  @include desktop {
+    grid-auto-rows: minmax(220px, auto); // perfectly sized rows
+  }
+}
+
+.pb-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: $spacing-unit * 2.5; // modern smooth corners
+  background-color: #0a0a0f;
+  cursor: pointer;
+  
+  // Complex Grid Architecture
+  @include tablet {
+    &--4 { grid-column: 1 / 3; grid-row: 1 / 4; } // Left Focal (massive bounds)
+    &--1 { grid-column: 3 / 5; grid-row: 1 / 2; } // Top Right Wide
+    &--2 { grid-column: 3 / 4; grid-row: 2 / 4; } // Mid Slim
+    &--3 { grid-column: 4 / 5; grid-row: 2 / 3; } // Mid Square 1
+    &--5 { grid-column: 4 / 5; grid-row: 3 / 4; } // Mid Square 2
+    &--6 { grid-column: 1 / 5; grid-row: 4 / 5; } // Bottom Bridging
+  }
+  
+  &:hover {
+    .pb-image {
+      transform: scale(1.04); // Extremely subtle zoom
+    }
+    .pb-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 50%);
+    }
+    .pb-text {
+      color: rgba(255, 255, 255, 1);
+      transform: translateY(0);
+    }
+  }
+}
+
+.pb-image {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); // Premium smooth easing
+}
+
+.pb-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 30%);
+  transition: background 0.8s ease;
+  pointer-events: none;
+}
+
+.pb-text {
+  position: absolute;
+  bottom: $spacing-unit * 2.5;
+  left: $spacing-unit * 3;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6); // Low opacity
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  transition: all 0.5s ease;
+  transform: translateY(3px);
+}
+
+// FOOTER
+.footer {
+  background-color: rgba(10, 10, 15, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: $spacing-unit * 10;
+  margin-top: $spacing-unit * 10;
+  
+  &__top {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-unit * 8;
+    padding-bottom: $spacing-unit * 8;
+    
+    @include desktop {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__brand {
+    flex: 1;
+    max-width: 400px;
+    
+    p {
+      margin-top: $spacing-unit * 2;
+      margin-bottom: $spacing-unit * 4;
+      font-size: 0.95rem;
+      color: $text-muted;
+    }
+  }
+
+  &__logo {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    span {
+      color: $neon-blue;
+    }
+  }
+
+  &__form {
+    display: flex;
+    gap: $spacing-unit * 2;
+    margin-top: $spacing-unit * 3;
+    flex-wrap: wrap; // Responsive fallback
+    
+    input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $spacing-unit;
+      padding: $spacing-unit * 1.5 $spacing-unit * 2;
+      color: $text-light;
+      font-family: $font-primary;
+      transition: all 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $neon-blue;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+    
+    
+  }
+
+  &__links {
+    flex: 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-unit * 5;
+    
+    @include tablet {
+      grid-template-columns: repeat(3, 1fr);
+      padding-left: $spacing-unit * 8;
+    }
+  }
+
+  &__column {
+    h4 {
+      font-size: 1.1rem;
+      margin-bottom: $spacing-unit * 3;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    
+    ul {
+      list-style: none;
+      
+      li {
+        margin-bottom: $spacing-unit * 1.5;
+        
+        a {
+          color: $text-muted;
+          font-size: 0.95rem;
+          transition: all 0.3s;
+          
+          &:hover {
+            color: $neon-blue;
+            padding-left: 2px; // subtle interaction
+          }
+        }
+      }
+    }
+  }
+
+  &__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: $spacing-unit * 4 0;
+    text-align: center;
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $text-muted;
+    }
+  }
+}

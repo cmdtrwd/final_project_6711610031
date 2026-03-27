@@ -1,0 +1,98 @@
+// BASE PARTIAL
+// Default browser resets, typography setup, and standard structural rules
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-primary;
+  background-color: $bg-color;
+  color: $text-light;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+// Typography resets
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: $spacing-unit * 2; // Operator
+}
+
+h1 {
+  font-size: $font-size-h1-mobile; // Mobile-first default sizing
+  
+  @include desktop {
+    font-size: $font-size-h1-desktop;
+  }
+}
+
+p {
+  color: $text-muted;
+  margin-bottom: $spacing-unit * 2;
+}
+
+a {
+  text-decoration: none;
+  color: $text-light;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: $neon-blue;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block; // Removes descender gap
+  border-radius: $spacing-unit;
+}
+
+// General Layout Wrapper
+.container {
+  width: 100%;
+  padding: 0 ($spacing-unit * 2.5); // 20px on mobile
+  margin: 0 auto;
+  
+  @include tablet {
+    padding: 0 ($spacing-unit * 5); // 40px on tablet
+  }
+  
+  @include desktop {
+    padding: 0 10%; // More padding on desktop
+    max-width: 1400px;
+  }
+}
+
+// Required Image Placeholders (Academic Requirement)
+.image-placeholder {
+  @include flex-center;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(138, 43, 226, 0.05) 100%);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: $spacing-unit * 2; // Operator usage
+  color: $text-muted;
+  min-height: 300px;
+  width: 100%;
+  position: relative;
+  
+  &::after {
+    content: 'Image Placeholder';
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+}
+
+.product-image {
+  @extend .image-placeholder; // Demonstrating @extend SASS feature
+  aspect-ratio: 1; // Makes it a square layout primarily
+  min-height: auto;
+}

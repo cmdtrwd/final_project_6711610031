@@ -1,0 +1,117 @@
+// MIXINS PARTIAL
+// Contains reusable snippets for layout, UI effects and media queries
+
+@use 'variables' as *;
+
+// 1. Flex Center Mixin
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// 2. Flex Between Mixin
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// 3. Glassmorphism Effect Mixin
+@mixin glass-effect {
+  background: $bg-card;
+  backdrop-filter: blur(16px); // Webkit prefix used in output via standard, here defined directly
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $border-color;
+  border-radius: $spacing-unit * 2; // SASS Operator: multiplication
+}
+
+// 4. Button Styles Mixin (Spinning Blob Effect)
+@mixin btn-glow($base-color, $text-color: #ffffff) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 30px;
+  border: 1px solid rgba($base-color, 0.4);
+  position: relative;
+  overflow: hidden;
+  border-radius: 10rem;
+  transition: all 0.2s;
+  font-family: $font-primary;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: $text-color;
+  z-index: 0;
+  box-shadow: 0 0px 7px -5px rgba(0, 0, 0, 0.5);
+  background: transparent;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -5rem;
+    margin-left: -5rem;
+    width: 10rem;
+    height: 10rem;
+    background: linear-gradient(
+      90deg,
+      $base-color 0%,
+      $neon-purple 49%,
+      lighten($base-color, 20%) 100%
+    );
+    border-radius: 40rem;
+    transition: 0.4s;
+    filter: blur(20px);
+    animation: effect infinite 3s linear;
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  &:hover {
+    background: rgba($base-color, 0.1);
+    color: $base-color;
+    box-shadow: 0 0 15px rgba($base-color, 0.4);
+
+    &::before {
+      width: 8rem;
+      height: 8rem;
+      margin-top: -4rem;
+      margin-left: -4rem;
+      opacity: 0.8;
+    }
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes effect {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// 5. Responsive Media Queries Mixins
+// Mobile-only Query (767px and below)
+@mixin mobile {
+  @media (max-width: #{$bp-tablet - 1px}) {
+    @content;
+  }
+}
+
+// Tablet Query (768px and up)
+@mixin tablet {
+  @media (min-width: $bp-tablet) {
+    @content;
+  }
+}
+
+// Desktop Query (1024px and up)
+@mixin desktop {
+  @media (min-width: $bp-desktop) {
+    @content;
+  }
+}
